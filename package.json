@@ -1,0 +1,27 @@
+{
+  "name": "sbuild",
+  "version": "0.1.0",
+  "description": "concat sql files to schema bundles",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mietennet/sbuild.git"
+  },
+  "author": "Karsten Pater",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mietennet/sbuild/issues"
+  },
+  "homepage": "https://github.com/mietennet/sbuild#readme",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "globby": "^6.1.0",
+    "lodash": "^4.17.2"
+  },
+  "bin": {
+    "sbuild": "bin/sbuild.js"
+  }
+}
