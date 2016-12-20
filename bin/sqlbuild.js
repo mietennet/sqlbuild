@@ -3,7 +3,7 @@
 const program = require('commander')
 const pkg = require('../package.json')
 
-const sbuild = require('..')
+const sqlbuild = require('..')
 
 const path = require('path')
 
@@ -18,7 +18,7 @@ program
   .option('-w, --write-file', 'create "schema.sql"-file, without that flag it writes to stdout')
   .parse(process.argv)
 
-sbuild({
+sqlbuild({
   rootPath: 'sample/' || path.basename(process.cwd()),
   oneFile: (program.oneFile),
   writeFiles: (program.writeFile)
