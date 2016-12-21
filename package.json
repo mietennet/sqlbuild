@@ -1,6 +1,6 @@
 {
   "name": "sqlbuild",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "concat sql files to schema bundles",
   "main": "index.js",
   "scripts": {
@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/mietennet/sqlbuild#readme",
   "dependencies": {
+    "chalk": "^1.1.3",
     "commander": "^2.9.0",
     "globby": "^6.1.0",
-    "lodash": "^4.17.2"
+    "lodash": "^4.17.2",
+    "voca": "^1.0.0"
   },
   "bin": {
     "sbuild": "bin/sqlbuild.js"
