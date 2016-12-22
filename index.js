@@ -68,7 +68,7 @@ module.exports = function (options) {
     const res = lines.join('\n')
 
     if ((!r || (options.recursive && path.basename(f) === options.initFilename)) && options.writeFile) {
-      const outFile = path.join(p, 'schema1.sql')
+      const outFile = path.join(p, options.schemaFilename)
       fs.writeFileSync(outFile, res + '\n', 'utf8')
       if (!options.quiet) {
         log('write', outFile)
