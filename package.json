@@ -24,6 +24,6 @@
     "voca": "^1.0.0"
   },
   "bin": {
-    "sbuild": "bin/sqlbuild.js"
+    "sqlbuild": "bin/sqlbuild.js"
   }
 }
