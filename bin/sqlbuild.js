@@ -2,6 +2,7 @@
 
 const program = require('commander')
 const chalk = require('chalk')
+const chokidar = require('chokidar')
 
 const pkg = require('../package.json')
 const sqlbuild = require('..')
@@ -18,14 +19,34 @@ program
   .option('-r, --recursive', 'create a schema.sql-file per "init.sql"-file in sub-dirs', false)
 
   .option('-i, --init-filename [name]', 'Name of init-file [init.sql]', 'init.sql')
-  .option('-f, --schema-filename [name]', 'Name of output-file [schema.sql]', 'schema.sql')
+  .option('-o, --schema-filename [name]', 'Name of output-file [schema.sql]', 'schema.sql')
 
   .option('-w, --write-file', 'create "schema.sql"-file, without that flag it writes to stdout', false)
+  .option('-W, --watch', 'watch for changes', false)
 
   .parse(process.argv)
 
-sqlbuild(program).then(function () {
-  return
-}).catch(function (e) {
-  console.error(chalk.bold.red(e.message))
-})
+function run (changedFile) {
+  sqlbuild(program, changedFile).then(function () {
+    return
+  }).catch(function (e) {
+    console.error(chalk.bold.red(e.message))
+  })
+}
+
+run()
+
+if (program.watch) {
+  const ignoredFiles = new RegExp([
+    'node_modules',
+    '.git',
+    (program.schemaFilename ? program.schemaFilename : undefined)
+  ].filter(function (e) { return e !== undefined }).join('|'), 'i')
+
+  const watcher = chokidar.watch('*.sql', {
+    ignored: ignoredFiles,
+    persistent: true
+  })
+
+  watcher.on('change', function (path) { run(path) })
+}

@@ -6,9 +6,11 @@ const globby = require('globby')
 const chalk = require('chalk')
 const v = require('voca')
 
-module.exports = function (options) {
+module.exports = function (options, changedFile) {
   const dir = (options.args[0] || '.')
   if (options.debug) log('dir', dir)
+
+  if (changedFile) log('changed', changedFile)
 
   function log (status, msg) {
     if (!options.quiet || options.verbose || options.debug) {
@@ -27,6 +29,8 @@ module.exports = function (options) {
           console.log('  ' + chalk.green(v.pad(status, 11)))
           console.log(msg)
           console.log('*/\n')
+        } else if (status === 'changed') {
+          console.log('--' + chalk.yellow(v.pad(status, 11)) + msg)
         } else {
           console.log('--' + chalk.green(v.pad(status, 11)) + msg)
         }
