@@ -43,7 +43,7 @@ if (program.watch) {
     (program.schemaFilename ? program.schemaFilename : undefined)
   ].filter(function (e) { return e !== undefined }).join('|'), 'i')
 
-  const watcher = chokidar.watch('*.sql', {
+  const watcher = chokidar.watch('**/*.sql', {
     ignored: ignoredFiles,
     persistent: true
   })
