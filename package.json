@@ -4,7 +4,8 @@
   "description": "concat sql files to schema bundles",
   "main": "index.js",
   "scripts": {
-    "test": "ava"
+    "version": "",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
