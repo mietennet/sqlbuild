@@ -43,7 +43,7 @@ function run (changedFile) {
         }
       } else {
         if (program.execMsg) {
-          const timeMsg = program.timing ? `(${new Date() - start} ms)` : ''
+          const timeMsg = program.timing ? chalk.grey(` (${new Date() - start} ms)`) : ''
           console.log('--' + chalk.green('  success  ') + program.execMsg + timeMsg)
         }
       }
