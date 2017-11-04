@@ -27,15 +27,22 @@ program
 
   .option('-E, --exec [cmd]', 'excute command', false)
   .option('-e  --exec-mode', 'errors while execute are ok', false)
+  .option('-m, --exec-msg [msg]', 'print message when -E returns with 0', '')
 
   .parse(process.argv)
 
 function run (changedFile) {
   sqlbuild(program, changedFile).then(function () {
     if (program.exec) {
-      if ((shell.exec(program.exec).code !== 0) && (!program.execMode)) {
-        console.error(chalk.bold.red('Error: execute failed'))
-        shell.exit(1)
+      if (shell.exec(program.exec).code !== 0) {
+        if (!program.execMode) {
+          console.error(chalk.bold.red('Error: execute failed'))
+          shell.exit(1)
+        }
+      } else {
+        if (programm.execMsg) {
+          console.log('--' + chalk.green('  success  ') + programm.execMsg)
+        }
       }
     }
 
