@@ -12,7 +12,9 @@ module.exports = function (options, changedFile) {
 
   if (changedFile) log('changed', changedFile)
 
-  function log (status, msg) {
+  function log (status, msg, timing = 0) {
+    const timeMsg = timing ? chalk.grey(` (${timing} ms)`) : ''
+
     if (!options.quiet || options.verbose || options.debug) {
       status = status || ''
       msg = msg || ''
@@ -28,11 +30,12 @@ module.exports = function (options, changedFile) {
           console.log('/*')
           console.log('  ' + chalk.green(v.pad(status, 11)))
           console.log(msg)
+          console.log(' ' + timeMsg)
           console.log('*/\n')
         } else if (status === 'changed') {
-          console.log('--' + chalk.yellow(v.pad(status, 11)) + msg)
+          console.log('--' + chalk.yellow(v.pad(status, 11)) + msg + timeMsg)
         } else {
-          console.log('--' + chalk.green(v.pad(status, 11)) + msg)
+          console.log('--' + chalk.green(v.pad(status, 11)) + msg + timeMsg)
         }
       }
     }
@@ -43,6 +46,8 @@ module.exports = function (options, changedFile) {
   }
 
   function buildOne (p, f, r) {
+    const start = new Date()
+
     f = path.join(p, f)
     p = path.dirname(f)
 
@@ -75,7 +80,7 @@ module.exports = function (options, changedFile) {
       const outFile = path.join(p, options.schemaFilename)
       fs.writeFileSync(outFile, res + '\n', 'utf8')
       if (!options.quiet) {
-        log('write', outFile)
+        log('write', outFile, (options.timing ? new Date() - start : 0))
         if (options.verbose) log()
       }
     }
