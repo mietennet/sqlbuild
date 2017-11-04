@@ -6,13 +6,13 @@ const globby = require('globby')
 const chalk = require('chalk')
 const v = require('voca')
 
-module.exports = function (options, changedFile) {
-  const dir = (options.args[0] || '.')
+module.exports = function(options, changedFile) {
+  const dir = options.args[0] || '.'
   if (options.debug) log('dir', dir)
 
   if (changedFile) log('changed', changedFile)
 
-  function log (status, msg, timing = 0) {
+  function log(status, msg, timing = 0) {
     const timeMsg = timing ? chalk.grey(` (${timing} ms)`) : ''
 
     if (!options.quiet || options.verbose || options.debug) {
@@ -21,9 +21,13 @@ module.exports = function (options, changedFile) {
 
       // const toJson = (!!msg) && (msg.constructor === Object || msg.constructor === Array)
       const toJson = typeof msg !== 'string'
-      msg = toJson ? '\n    ' + v.replaceAll(JSON.stringify(msg, null, '  '), '\n', '\n    ') + '\n' : msg
+      msg = toJson
+        ? '\n    ' +
+          v.replaceAll(JSON.stringify(msg, null, '  '), '\n', '\n    ') +
+          '\n'
+        : msg
 
-      if ((status + msg) === '') {
+      if (status + msg === '') {
         console.log('')
       } else {
         if (v.includes(msg, '\n')) {
@@ -41,18 +45,18 @@ module.exports = function (options, changedFile) {
     }
   }
 
-  function assert (val, msg) {
+  function assert(val, msg) {
     if (!val) throw new Error(msg)
   }
 
-  function buildOne (p, f, r) {
+  function buildOne(p, f, r) {
     const start = new Date()
 
     f = path.join(p, f)
     p = path.dirname(f)
 
     assert(fs.existsSync(f), 'File not found! ' + f)
-    if (options.verbose) log((r ? '+++++' : 'entry'), f)
+    if (options.verbose) log(r ? '+++++' : 'entry', f)
 
     var data = fs.readFileSync(f, 'utf8')
     var lines = data.trim().split('\n')
@@ -76,11 +80,15 @@ module.exports = function (options, changedFile) {
 
     const res = lines.join('\n')
 
-    if ((!r || (options.recursive && path.basename(f) === options.initFilename)) && options.writeFile) {
+    if (
+      (!r ||
+        (options.recursive && path.basename(f) === options.initFilename)) &&
+      options.writeFile
+    ) {
       const outFile = path.join(p, options.schemaFilename)
       fs.writeFileSync(outFile, res + '\n', 'utf8')
       if (!options.quiet) {
-        log('write', outFile, (options.timing ? new Date() - start : 0))
+        log('write', outFile, options.timing ? new Date() - start : 0)
         if (options.verbose) log()
       }
     }
@@ -102,12 +110,12 @@ module.exports = function (options, changedFile) {
   pattern.push(options.initFilename)
   if (options.debug) log('pattern', pattern)
 
-  return globby(pattern, {cwd: dir}).then(function (files) {
+  return globby(pattern, { cwd: dir }).then(function(files) {
     if (options.debug) log('entry file(s)', files)
 
     log()
 
-    const c = files.reduce(function (content, file) {
+    const c = files.reduce(function(content, file) {
       const nextContent = buildOne(dir, file)
 
       return options.writeFile ? '' : content + nextContent
