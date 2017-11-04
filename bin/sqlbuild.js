@@ -26,13 +26,14 @@ program
   .option('-W, --watch', 'watch for changes', false)
 
   .option('-E, --exec [cmd]', 'excute command', false)
+  .option('-e  --exec-mode', 'errors while execute are ok', false)
 
   .parse(process.argv)
 
 function run (changedFile) {
   sqlbuild(program, changedFile).then(function () {
     if (program.exec) {
-      if (shell.exec(program.exec).code !== 0) {
+      if ((shell.exec(program.exec).code !== 0) && (program.execMode === false)) {
         console.error(chalk.bold.red('Error: execute failed'))
         shell.exit(1)
       }
