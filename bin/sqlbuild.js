@@ -42,7 +42,9 @@ function run (changedFile) {
       } else {
         if (program.execMsg) {
           console.log('--' + chalk.green('  success  ') + program.execMsg)
-        }    }
+        }
+      }
+    }
 
     return
   }).catch(function (e) {
