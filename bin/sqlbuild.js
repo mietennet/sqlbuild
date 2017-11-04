@@ -33,7 +33,7 @@ program
 function run (changedFile) {
   sqlbuild(program, changedFile).then(function () {
     if (program.exec) {
-      if ((shell.exec(program.exec).code !== 0) && (program.execMode === false)) {
+      if ((shell.exec(program.exec).code !== 0) && (!program.execMode)) {
         console.error(chalk.bold.red('Error: execute failed'))
         shell.exit(1)
       }
