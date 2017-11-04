@@ -15,6 +15,7 @@ program
   .option('-v, --verbose', 'prints all filenames', false)
   .option('-q, --quiet', 'prints no filenames', false)
   .option('-d, --debug', 'prints debug info', false)
+  .option('-t, --timing', 'prints times taken per log line', false)
 
   //  .option('-1, --one-file', 'create all-in-one "schema.sql"-file', false)
   .option('-r, --recursive', 'create a schema.sql-file per "init.sql"-file in sub-dirs', false)
@@ -34,6 +35,7 @@ program
 function run (changedFile) {
   sqlbuild(program, changedFile).then(function () {
     if (program.exec) {
+      const start = new Date()
       if (shell.exec(program.exec).code !== 0) {
         if (!program.execMode) {
           console.error(chalk.bold.red('Error: execute failed'))
@@ -41,7 +43,8 @@ function run (changedFile) {
         }
       } else {
         if (program.execMsg) {
-          console.log('--' + chalk.green('  success  ') + program.execMsg)
+          const timeMsg = program.timing ? `(${new Date() - start} ms)` : ''
+          console.log('--' + chalk.green('  success  ') + program.execMsg + timeMsg)
         }
       }
     }
