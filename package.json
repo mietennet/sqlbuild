@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "version": "",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "upgrade:show": "npx npm-check-updates",
+    "upgrade:save": "npx npm-check-updates -u"
   },
   "repository": {
     "type": "git",
@@ -18,13 +20,13 @@
   },
   "homepage": "https://github.com/mietennet/sqlbuild#readme",
   "dependencies": {
-    "chalk": "^2.3.0",
-    "chokidar": "^1.6.1",
-    "commander": "^2.9.0",
-    "globby": "^6.1.0",
-    "lodash": "^4.17.4",
-    "shelljs": "^0.7.7",
-    "voca": "^1.3.0"
+    "chalk": "^4.1.2",
+    "chokidar": "^3.5.2",
+    "commander": "^8.3.0",
+    "globby": "^12.0.2",
+    "lodash": "^4.17.21",
+    "shelljs": "^0.8.4",
+    "voca": "^1.4.0"
   },
   "bin": {
     "sqlbuild": "bin/sqlbuild.js"
