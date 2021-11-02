@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 // import async from 'async'
 const _ = require('lodash')
-const globby = require('globby')
+const globby = import('globby')
 const chalk = require('chalk')
 const v = require('voca')
 
