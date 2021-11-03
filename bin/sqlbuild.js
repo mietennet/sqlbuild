@@ -10,8 +10,8 @@ const sqlbuild = require('..')
 
 program
   .version(pkg.version)
-  .usage('[options] <dir>')
-  // .arguments('<dir>')
+  // .usage('[options] <dir>')
+  .arguments('<dir>')
   .option('-v, --verbose', 'prints all filenames', false)
   .option('-q, --quiet', 'prints no filenames', false)
   .option('-d, --debug', 'prints debug info', false)
@@ -41,25 +41,26 @@ program
   .option('-E, --exec [cmd]', 'excute command', false)
   .option('-e  --exec-mode', 'errors while execute are ok', false)
   .option('-m, --exec-msg [msg]', 'print message when -E returns with 0', '')
+  .action((dir, options) => run(dir, options))
   .parse(process.argv)
 
-function run(changedFile) {
-  sqlbuild(program, changedFile)
+function run(dir, options) {
+  sqlbuild(dir, options)
     .then(function() {
-      if (program.exec) {
+      if (options.exec) {
         const start = new Date()
-        if (shell.exec(program.exec).code !== 0) {
-          if (!program.execMode) {
+        if (shell.exec(options.exec).code !== 0) {
+          if (!options.execMode) {
             console.error(chalk.bold.red('Error: execute failed'))
             shell.exit(1)
           }
         } else {
-          if (program.execMsg) {
-            const timeMsg = program.timing
+          if (options.execMsg) {
+            const timeMsg = options.timing
               ? chalk.grey(` (${new Date() - start} ms)`)
               : ''
             console.log(
-              '--' + chalk.green('  success  ') + program.execMsg + timeMsg
+              '--' + chalk.green('  success  ') + options.execMsg + timeMsg
             )
           }
         }
@@ -72,26 +73,24 @@ function run(changedFile) {
     })
 }
 
-run()
-
-if (program.watch) {
-  const ignoredFiles = new RegExp(
-    [
-      'node_modules',
-      '.git',
-      program.schemaFilename ? program.schemaFilename : undefined
-    ]
-      .filter(function(e) {
-        return e !== undefined
-      })
-      .join('|'),
-    'i'
-  )
-
-  const watcher = chokidar.watch('**/*.sql', {
-    ignored: ignoredFiles,
-    persistent: true
-  })
-
-  watcher.on('change', run)
-}
+// if (options.watch) {
+//   const ignoredFiles = new RegExp(
+//     [
+//       'node_modules',
+//       '.git',
+//       options.schemaFilename ? options.schemaFilename : undefined
+//     ]
+//       .filter(function(e) {
+//         return e !== undefined
+//       })
+//       .join('|'),
+//     'i'
+//   )
+//
+//   const watcher = chokidar.watch('**/*.sql', {
+//     ignored: ignoredFiles,
+//     persistent: true
+//   })
+//
+//   watcher.on('change', run)
+// }

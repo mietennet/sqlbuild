@@ -2,12 +2,11 @@ const fs = require('fs')
 const path = require('path')
 // import async from 'async'
 const _ = require('lodash')
-const globby = import('globby')
+const globby = require('globby')
 const chalk = require('chalk')
 const v = require('voca')
 
-module.exports = function(options, changedFile) {
-  const dir = options.args[0] || '.'
+module.exports = function(dir, options, changedFile = false) {
   if (options.debug) log('dir', dir)
 
   if (changedFile) log('changed', changedFile)
